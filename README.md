@@ -8,10 +8,11 @@
 
 - **安装版**：下载 `Setup-win10-win11-x64.exe` 结尾的文件，双击安装。可以装到 D 盘或其他可写目录。
 - **便携版**：完整解压 ZIP，双击 `app\Lindrop.exe`。两个版本都已打包运行环境，无需另装 .NET、Python、Rust 或小米电脑管家。
+- **一键安装脚本**：下载后双击 `Install-Lindrop-Online.cmd`。它会联网下载 0.2.5 Preview，核对安装包的 SHA-256，再打开安装窗口。只想校验时，在命令行运行 `Install-Lindrop-Online.cmd --verify-only`。[下载脚本](https://github.com/majian01/Lindrop/releases/download/v0.2.5-preview/Install-Lindrop-Online.cmd)
 
 打开邻渡，在手机上选择文件 → 小米互传 → 选择电脑 → 在电脑顶部点「接收」。接收目录可以在设置里改，收到的文件可以从历史记录打开。更新前先从托盘退出旧版；卸载保留已收到的文件。
 
-**这版可直接从手机接收。** 电脑发往手机的原生小米互传需要厂商端兼容身份，公开下载包不附带。
+**这版可直接从手机接收。** 电脑发往手机的原生小米互传需要厂商端兼容身份，公开版和一键安装脚本均不配置该身份。
 
 要求 Windows 10 21H2 或更新版本（含 Windows 11）、x64、低功耗蓝牙（BLE）及支持 Wi-Fi Direct 的网卡和驱动。此前用 Windows 11、Intel AX210 和运行澎湃 OS 3 的小米 15 验证过无线互传；本版未在 Windows 10 实机上复测无线传输。暂无 Linux 版。
 
@@ -20,6 +21,8 @@
 Lindrop is an unofficial Xiaomi Share companion for Windows. Pick a file on your phone, choose your PC in Xiaomi Share, and accept it in the banner at the top of the screen. The two devices do not need to be on the same Wi-Fi network.
 
 [Download for Windows](https://github.com/majian01/Lindrop/releases). Run the setup EXE, or extract the portable ZIP and open `app\Lindrop.exe`. The runtimes are included. You can change the download folder in Settings and open received files from History. Quit Lindrop from the tray before updating. Uninstalling keeps your received files.
+
+Double-click `Install-Lindrop-Online.cmd` to download and verify the 0.2.5 Preview installer and open Setup. Run it with `--verify-only` to check the download without installing. [Download the script](https://github.com/majian01/Lindrop/releases/download/v0.2.5-preview/Install-Lindrop-Online.cmd)
 
 **Phone-to-PC receiving works without extra setup.** Sending to the phone’s native Xiaomi Share requires a compatible vendor identity, which is not included in the public build.
 
