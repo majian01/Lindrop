@@ -81,7 +81,7 @@ class IndependentServer:
         if self.identity_store is not None:
             from bks_identity import load_identity
             if not self.identity_store.is_file():
-                raise FileNotFoundError('缺少原生互传身份文件 Identity\\pc.bks，请按 README 从手机 APK 提取')
+                raise FileNotFoundError('未配置小米原生发送身份')
             identity = load_identity(self.identity_store)
         else:
             identity = new_identity()

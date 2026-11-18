@@ -6,7 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <AssemblyName>Lindrop</AssemblyName>
-    <Version>0.2.4-preview</Version>
+    <Version>0.2.5-preview</Version>
     <Product>邻渡 (Lindrop)</Product>
     <Description>Independent Windows file transfer client compatible with Xiaomi Share</Description>
     <ApplicationIcon>Assets\Lindrop.ico</ApplicationIcon>

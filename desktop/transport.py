@@ -59,6 +59,9 @@ class Transport:
             self.receiver = None
 
     def run_send(self, packet):
+        if not self.identity.is_file():
+            self.emit('error', text='当前安装未配置小米原生发送身份。手机发到电脑仍可使用。')
+            return
         if not self.begin():
             self.emit('error', text='正在处理另一笔传输')
             return

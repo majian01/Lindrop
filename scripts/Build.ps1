@@ -1,8 +1,6 @@
 ﻿param(
     [string] $Python = 'python',
     [string] $PythonRuntimePath,
-    [string] $NativeIdentityPath,
-    [string] $VcRuntimePath,
     [string] $Dotnet = 'dotnet',
     [string] $Cargo = 'cargo',
     [string] $Output
@@ -43,7 +41,10 @@ if ($PythonRuntimePath) {
     $zip = Join-Path $scratch 'python-3.12.10-embed-amd64.zip'
     Invoke-WebRequest 'https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip' -OutFile $zip
     # Official release checksum (integrity check, not a signature).
-    if ((Get-FileHash $zip -Algorithm MD5).Hash -ne 'FE8EF205F2E9C3BA44D0CF9954E1ABD3') { throw 'Python archive checksum mismatch.' }
+    $md5 = [Security.Cryptography.MD5]::Create()
+    try { $archiveHash = [BitConverter]::ToString($md5.ComputeHash([IO.File]::ReadAllBytes($zip))).Replace('-', '') }
+    finally { $md5.Dispose() }
+    if ($archiveHash -ne 'FE8EF205F2E9C3BA44D0CF9954E1ABD3') { throw 'Python archive checksum mismatch.' }
     Expand-Archive -LiteralPath $zip -DestinationPath $runtime -Force
     & $Python -c 'import sys; assert sys.version_info[:2] == (3,12) and sys.maxsize > 2**32'
     if ($LASTEXITCODE) { throw 'Install Python 3.12 x64 for packaging.' }
@@ -51,35 +52,24 @@ if ($PythonRuntimePath) {
     if ($LASTEXITCODE) { throw 'Python dependency installation failed.' }
     [IO.File]::WriteAllLines((Join-Path $runtime 'python312._pth'), @('python312.zip','.','Lib/site-packages'))
 }
-if ($NativeIdentityPath) {
-    $identityDirectory = Join-Path $app 'Identity'
-    New-Item -ItemType Directory -Path $identityDirectory -Force | Out-Null
-    Copy-Item -LiteralPath $NativeIdentityPath -Destination (Join-Path $identityDirectory 'pc.bks') -Force
-}
-if ($VcRuntimePath) {
-    foreach ($file in @('msvcp140.dll','vcruntime140.dll','vcruntime140_1.dll')) {
-        Copy-Item -LiteralPath (Join-Path $VcRuntimePath $file) -Destination $runtime -Force
-    }
-} else { Write-Warning 'Supply -VcRuntimePath with legally redistributable x64 VC++ runtime DLLs to avoid relying on an installed VC++ runtime.' }
 $validation = 'import cffi; cffi.FFI().cdef("int puts(const char *);"); import Crypto.Cipher.AES; import cryptography.hazmat.bindings._rust; import winrt.windows.devices.bluetooth.advertisement; import winrt.windows.devices.wifidirect'
 $validation | & (Join-Path $runtime 'python.exe') -B -
 if ($LASTEXITCODE) { throw 'Bundled Python dependency check failed.' }
-foreach ($file in @('Install-Lindrop.cmd','Install-Lindrop.ps1','Uninstall-Lindrop.cmd','Uninstall-Lindrop.ps1','Set-ReleaseIntegrity.ps1','ReleaseFileIntegrity.cs')) {
+foreach ($file in @('Install-Lindrop.cmd','Install-Lindrop.ps1','Uninstall-Lindrop.cmd','Uninstall-Lindrop.ps1','Set-ReleaseIntegrity.ps1','ReleaseFileIntegrity.cs','Test-ReleasePackage.ps1')) {
     Copy-Item (Join-Path $PSScriptRoot $file) $Output -Force
 }
 foreach ($file in @('README.md','LICENSE')) { Copy-Item (Join-Path $root $file) $Output -Force }
 Copy-Item (Join-Path $root 'LICENSES') $Output -Recurse -Force
-$identityStatus = if ($NativeIdentityPath) { 'separately supplied native identity included; not part of the MIT project code' } else { 'native identity excluded; PC-to-phone sending requires a separate Identity/pc.bks' }
 [IO.File]::WriteAllText((Join-Path $Output 'BUILD_INFO.md'), @"
-# Lindrop 0.2.4 Preview
+# Lindrop 0.2.5 Preview
 
 Independent Windows file transfer client compatible with Xiaomi Share.
 Built $(Get-Date -Format 'yyyy-MM-dd'), Release x64; Windows 10 build 19044+ / Windows 11 target.
 .NET/WPF, Rust transfer service, and embedded Python runtimes included.
-Identity: $identityStatus.
+Public package: no vendor identity. PC-to-phone native sending requires a compatible identity.
 No MiDropTransfer.dll, LIBEAY32.dll or ssleay32.dll is bundled by this build.
 This build record does not assert real-device or cross-adapter validation.
 "@, [Text.UTF8Encoding]::new($false))
 & (Join-Path $PSScriptRoot 'Set-ReleaseIntegrity.ps1') -ApplicationDirectory $app
-if (!$NativeIdentityPath) { Write-Warning 'Sending requires a separately obtained Identity\pc.bks. Receiving does not require it. See README.' }
+& (Join-Path $PSScriptRoot 'Test-ReleasePackage.ps1') -PackagePath $Output
 Write-Host "Release directory: $Output"
