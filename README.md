@@ -12,9 +12,9 @@
 
 打开邻渡，在手机上选择文件 → 小米互传 → 选择电脑 → 在电脑顶部点「接收」。接收目录可以在设置里改，收到的文件可以从历史记录打开。更新前先从托盘退出旧版；卸载保留已收到的文件。
 
-**这版可直接从手机接收。** 电脑发往手机的原生小米互传需要厂商端兼容身份，公开版和一键安装脚本均不配置该身份。
+**这版可直接从手机接收。** 邻渡发往手机的原生小米互传需要小米授权的身份凭据，目前未查到面向第三方 Windows 应用的官方申请入口。需要从电脑发文件时，支持的小米笔记本可用小米电脑管家，其他兼容电脑可用小米互联服务（手机和电脑需在同一局域网）。[小米互传](https://hyperos.mi.com/continuity/abilities/ab0001) · [小米 Windows 互联](https://os.mi.com/continuity/abilities/ab0019)
 
-要求 Windows 10 21H2 或更新版本（含 Windows 11）、x64、低功耗蓝牙（BLE）及支持 Wi-Fi Direct 的网卡和驱动。此前用 Windows 11、Intel AX210 和运行澎湃 OS 3 的小米 15 验证过无线互传；本版未在 Windows 10 实机上复测无线传输。暂无 Linux 版。
+要求 Windows 10 21H2 或更新版本（含 Windows 11）、x64、低功耗蓝牙（BLE）及支持 Wi-Fi Direct 的网卡和驱动。实机测试覆盖 Windows 10、Windows 11、澎湃 OS 3 和澎湃 OS 4。暂无 Linux 版。
 
 ## English
 
@@ -24,9 +24,9 @@ Lindrop is an unofficial Xiaomi Share companion for Windows. Pick a file on your
 
 Double-click `Install-Lindrop-Online.cmd` to download and verify the 0.2.5 Preview installer and open Setup. Run it with `--verify-only` to check the download without installing. [Download the script](https://github.com/majian01/Lindrop/releases/download/v0.2.5-preview/Install-Lindrop-Online.cmd)
 
-**Phone-to-PC receiving works without extra setup.** Sending to the phone’s native Xiaomi Share requires a compatible vendor identity, which is not included in the public build.
+**Phone-to-PC receiving works without extra setup.** Sending from Lindrop to native Xiaomi Share requires Xiaomi-authorized credentials. We have not found a public application process for third-party Windows apps. To send from a PC, use Xiaomi PC Manager on supported Xiaomi laptops or the official Xiaomi Interconnectivity app on other compatible PCs on the same local network as the phone. [Xiaomi Share](https://hyperos.mi.com/continuity/abilities/ab0001) · [Xiaomi Windows Interconnectivity](https://os.mi.com/continuity/abilities/ab0019)
 
-Requires Windows 10 21H2 or later, including Windows 11 (x64), Bluetooth LE, and Wi-Fi Direct. Interoperability was previously tested on Windows 11 with an Intel AX210 and a Xiaomi 15 running HyperOS 3. Wireless transfer has not been retested on a Windows 10 device for this release. Linux is not supported.
+Requires Windows 10 21H2 or later, including Windows 11 (x64), Bluetooth LE, and Wi-Fi Direct. Hardware testing has covered Windows 10, Windows 11, Xiaomi HyperOS 3, and Xiaomi HyperOS 4. Linux is not supported.
 
 <a id="build"></a>
 ## 从源码构建 / Build from source
