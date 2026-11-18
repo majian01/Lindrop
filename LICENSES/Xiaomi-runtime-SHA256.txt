@@ -1,0 +1,4 @@
+Proprietary runtime, not included in public source. Redistribution permission not established.
+fac9fde6d7b86a83555ea51fc7523dd3d03ec23c55611625ef5c1537ee8b95aa  MiDropTransfer.dll
+0dfd5ed5265a014213c71b12df30141cdebadf3410c58ba9cf85d1c7ff6bbef0  LIBEAY32.dll
+73d263a26866fe2a6d163e9bc955e60227bbe7560d6465a21cddcab5e2fd3655  ssleay32.dll
