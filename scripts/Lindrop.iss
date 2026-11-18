@@ -10,8 +10,8 @@
 [Setup]
 AppId=Lindrop-Windows
 AppName=邻渡 (Lindrop)
-AppVersion=0.2.5
-AppVerName=邻渡 (Lindrop) 0.2.5 Preview
+AppVersion=0.2.6
+AppVerName=邻渡 (Lindrop) 0.2.6 Preview
 AppPublisher=Lindrop contributors
 DefaultDirName={code:GetDefaultInstallDirectory}
 DefaultGroupName=邻渡 (Lindrop)
@@ -28,7 +28,7 @@ DefaultDialogFontName=Microsoft YaHei UI
 SetupIconFile=..\desktop\Assets\Lindrop.ico
 UninstallDisplayIcon={app}\Lindrop.exe
 OutputDir={#ReleaseDir}
-OutputBaseFilename=Lindrop-0.2.5-preview-Setup-win10-win11-x64
+OutputBaseFilename=Lindrop-0.2.6-preview-Setup-win10-win11-x64
 Compression=lzma2/normal
 SolidCompression=yes
 CloseApplications=yes

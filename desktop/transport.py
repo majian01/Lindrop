@@ -14,8 +14,9 @@ from sender import Packets, find_peers, send, watch_packets
 
 
 class Transport:
-    def __init__(self, identity):
+    def __init__(self, identity, xiaomi_runtime):
         self.identity = identity
+        self.xiaomi_runtime = xiaomi_runtime
         self.output = threading.Lock()
         self.radio = threading.Lock()
         self.control = threading.Lock()
@@ -59,8 +60,9 @@ class Transport:
             self.receiver = None
 
     def run_send(self, packet):
-        if not self.identity.is_file():
-            self.emit('error', text='当前安装未配置小米原生发送身份。手机发到电脑仍可使用。')
+        runtime = self.xiaomi_runtime if self.xiaomi_runtime.is_dir() else None
+        if runtime is None and not self.identity.is_file():
+            self.emit('error', text='请先按 README 准备小米电脑管家 5.8.1.130 的三个 DLL，并放入程序目录的 XiaomiRuntime 文件夹。')
             return
         if not self.begin():
             self.emit('error', text='正在处理另一笔传输')
@@ -79,13 +81,17 @@ class Transport:
                 self.log('GATT peripheral already discovered while scanning')
             elif observed:
                 self.log('Scan observed this phone without a linked GATT peripheral; skipping repeated wait')
+            if runtime is not None:
+                from official_server import verify_runtime
+                verify_runtime(runtime)
             with watch_packets() as packets:
                 send(paths, peer, packets, '邻渡', 600, self.log,
+                     official_runtime=runtime,
                      prepared=packet['checksums'], gatt_wait=0 if observed else 2, gatt_hint=hint,
                      response_timeout=40, cancel=self.cancelled,
                      progress=lambda **data: self.emit('progress', direction='发送', **data),
-                     independent_service=Path(__file__).resolve().with_name('lindrop-transfer.exe'),
-                     independent_identity=self.identity)
+                     independent_service=None if runtime else Path(__file__).resolve().with_name('lindrop-transfer.exe'),
+                     independent_identity=None if runtime else self.identity)
             self.emit('done', direction='发送', peer=packet['name'], files=[str(path) for path in paths])
         except Exception as error:
             if not self.cancelled.is_set():
@@ -284,4 +290,4 @@ class Receiver(MtaPcReceiver):
 
 
 if __name__ == '__main__':
-    Transport(Path(sys.argv[2])).commands()
+    Transport(Path(sys.argv[2]), Path(sys.argv[3])).commands()

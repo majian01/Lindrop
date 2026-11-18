@@ -147,6 +147,7 @@ internal sealed class TransferEngine : IAsyncDisposable
         start.ArgumentList.Add(Path.Combine(AppContext.BaseDirectory, "transport.py"));
         start.ArgumentList.Add(state.BackendSource);
         start.ArgumentList.Add(state.DefaultIdentity);
+        start.ArgumentList.Add(Path.Combine(AppContext.BaseDirectory, "XiaomiRuntime"));
         process = new Process { StartInfo = start, EnableRaisingEvents = true };
         process.OutputDataReceived += (_, e) =>
         {

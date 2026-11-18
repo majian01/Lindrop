@@ -28,7 +28,7 @@ Copy-Item -LiteralPath (Join-Path $cargoTarget 'release\lindrop-transfer.exe') -
 if ($LASTEXITCODE) { throw '.NET publish failed.' }
 New-Item -ItemType Directory -Path (Join-Path $app 'backend') -Force | Out-Null
 Get-ChildItem -LiteralPath (Join-Path $root 'transport') -Filter '*.py' |
-    Where-Object Name -ne 'official_server.py' | Copy-Item -Destination (Join-Path $app 'backend') -Force
+    Copy-Item -Destination (Join-Path $app 'backend') -Force
 Copy-Item (Join-Path $root 'transport\LICENSE') (Join-Path $app 'backend') -Force
 $runtime = Join-Path $app 'python'
 if ($PythonRuntimePath) {
@@ -61,12 +61,12 @@ foreach ($file in @('Install-Lindrop.cmd','Install-Lindrop.ps1','Uninstall-Lindr
 foreach ($file in @('README.md','LICENSE')) { Copy-Item (Join-Path $root $file) $Output -Force }
 Copy-Item (Join-Path $root 'LICENSES') $Output -Recurse -Force
 [IO.File]::WriteAllText((Join-Path $Output 'BUILD_INFO.md'), @"
-# Lindrop 0.2.5 Preview
+# Lindrop 0.2.6 Preview
 
 Independent Windows file transfer client compatible with Xiaomi Share.
 Built $(Get-Date -Format 'yyyy-MM-dd'), Release x64; Windows 10 build 19044+ / Windows 11 target.
 .NET/WPF, Rust transfer service, and embedded Python runtimes included.
-Public package: no vendor identity. PC-to-phone native sending requires a compatible identity.
+For PC-to-phone sending, add the supported Xiaomi PC Manager runtime as described in README.md.
 No MiDropTransfer.dll, LIBEAY32.dll or ssleay32.dll is bundled by this build.
 This build record does not assert real-device or cross-adapter validation.
 "@, [Text.UTF8Encoding]::new($false))

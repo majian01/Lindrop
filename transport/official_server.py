@@ -16,15 +16,25 @@ RUNTIME_HASHES = {
 PTR = C.c_void_p
 
 
+def verify_runtime(runtime):
+    for name, digest in RUNTIME_HASHES.items():
+        path = runtime / name
+        if not path.is_file():
+            raise FileNotFoundError(f'XiaomiRuntime 缺少 {name}')
+        with path.open('rb') as file:
+            if hashlib.file_digest(file, 'sha256').hexdigest() != digest:
+                raise ValueError(f'{name} 校验失败。请使用小米电脑管家 5.8.1.130 的原文件。')
+
+
 class OfficialServer:
     def __init__(self, runtime, port, task, peer, files, log, progress=None):
         runtime = runtime.resolve()
-        for name, digest in RUNTIME_HASHES.items():
-            with (runtime / name).open('rb') as file:
-                if hashlib.file_digest(file, 'sha256').hexdigest() != digest:
-                    raise ValueError(f'Unsupported Xiaomi component version: {name}')
-        with os.add_dll_directory(str(runtime)):
-            self.dll = C.CDLL(str(runtime / 'MiDropTransfer.dll'))
+        verify_runtime(runtime)
+        try:
+            with os.add_dll_directory(str(runtime)):
+                self.dll = C.CDLL(str(runtime / 'MiDropTransfer.dll'))
+        except OSError as error:
+            raise OSError('无法加载小米文件服务。请检查 Microsoft Visual C++ 2015–2022 x64 运行库。') from error
         self.start = getattr(self.dll, '?start_server@http@@YAXGAEBUServerDelegate@1@_N@Z')
         self.start.argtypes = (C.c_ushort, PTR, C.c_bool)
         self.start.restype = None

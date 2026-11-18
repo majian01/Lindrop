@@ -78,7 +78,7 @@ Write-Host "Installed: $exe"
 $uninstall = [Microsoft.Win32.Registry]::CurrentUser.CreateSubKey('Software\Microsoft\Windows\CurrentVersion\Uninstall\Lindrop-Windows')
 try {
     $uninstall.SetValue('DisplayName', '邻渡 (Lindrop)')
-    $uninstall.SetValue('DisplayVersion', '0.2.5-preview')
+    $uninstall.SetValue('DisplayVersion', '0.2.6-preview')
     $uninstall.SetValue('InstallLocation', $target)
     $uninstall.SetValue('DisplayIcon', $exe)
     $uninstall.SetValue('UninstallString', ('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $target 'Uninstall-Lindrop.ps1') + '"'))

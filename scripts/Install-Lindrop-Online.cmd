@@ -5,11 +5,11 @@ if /i "%~1"=="--verify-only" set "LINDROP_VERIFY_ONLY=1"
 
 "%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -NonInteractive -Command ^
     "$ErrorActionPreference = 'Stop';" ^
-    "$url = 'https://github.com/majian01/Lindrop/releases/download/v0.2.5-preview/Lindrop-0.2.5-preview-Setup-win10-win11-x64.exe';" ^
-    "$expected = '462697c138de548b43cd9d398baeae53be6a876cfdfb48a57e18cc3ee624b8ca';" ^
+    "$url = 'https://github.com/majian01/Lindrop/releases/download/v0.2.6-preview/Lindrop-0.2.6-preview-Setup-win10-win11-x64.exe';" ^
+    "$expected = 'e5675c1de0d717e4e23d939dee9a5a75e061e9196c6e9100279e9d6f28dcd6f0';" ^
     "$setup = Join-Path ([IO.Path]::GetTempPath()) ('Lindrop-' + [Guid]::NewGuid().ToString('N') + '.exe');" ^
     "try {" ^
-    "    Write-Host 'Downloading Lindrop 0.2.5 Preview from GitHub...';" ^
+    "    Write-Host 'Downloading Lindrop 0.2.6 Preview from GitHub...';" ^
     "    $curl = Join-Path $env:SystemRoot 'System32\curl.exe';" ^
     "    & $curl --fail --location --progress-bar --show-error --retry 2 --connect-timeout 15 --max-time 600 --output $setup $url;" ^
     "    if ($LASTEXITCODE -ne 0) { throw ('Download failed (curl exit ' + $LASTEXITCODE + ').') };" ^

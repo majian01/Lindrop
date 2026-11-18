@@ -2,19 +2,33 @@
 
 手机拍完照片，打开小米互传，就能发到 Windows。邻渡在电脑托盘里等着：有文件到来，点屏幕顶部的「接收」即可。手机和电脑不用连同一个 Wi-Fi。
 
-[下载 Windows 版](https://github.com/majian01/Lindrop/releases) · [English](#english) · [从源码构建](#build) · [第三方出处](#credits)
+[下载 Windows 版](https://github.com/majian01/Lindrop/releases) · [电脑发手机](#pc-to-phone) · [English](#english) · [从源码构建](#build) · [第三方出处](#credits)
 
 ## 下载和使用
 
 - **安装版**：下载 `Setup-win10-win11-x64.exe` 结尾的文件，双击安装。可以装到 D 盘或其他可写目录。
 - **便携版**：完整解压 ZIP，双击 `app\Lindrop.exe`。两个版本都已打包运行环境，无需另装 .NET、Python、Rust 或小米电脑管家。
-- **一键安装脚本**：下载后双击 `Install-Lindrop-Online.cmd`。它会联网下载 0.2.5 Preview，核对安装包的 SHA-256，再打开安装窗口。只想校验时，在命令行运行 `Install-Lindrop-Online.cmd --verify-only`。[下载脚本](https://github.com/majian01/Lindrop/releases/download/v0.2.5-preview/Install-Lindrop-Online.cmd)
+- **一键安装脚本**：双击 `Install-Lindrop-Online.cmd` 即可下载 0.2.6 Preview，校验后打开安装窗口。用 `--verify-only` 可以只下载和校验。[下载脚本](https://github.com/majian01/Lindrop/releases/download/v0.2.6-preview/Install-Lindrop-Online.cmd)
 
 打开邻渡，在手机上选择文件 → 小米互传 → 选择电脑 → 在电脑顶部点「接收」。接收目录可以在设置里改，收到的文件可以从历史记录打开。更新前先从托盘退出旧版；卸载保留已收到的文件。
 
-**这版可直接从手机接收。** 邻渡发往手机的原生小米互传需要小米授权的身份凭据，目前未查到面向第三方 Windows 应用的官方申请入口。需要从电脑发文件时，支持的小米笔记本可用小米电脑管家，其他兼容电脑可用小米互联服务（手机和电脑需在同一局域网）。[小米互传](https://hyperos.mi.com/continuity/abilities/ab0001) · [小米 Windows 互联](https://os.mi.com/continuity/abilities/ab0019)
-
 要求 Windows 10 21H2 或更新版本（含 Windows 11）、x64、低功耗蓝牙（BLE）及支持 Wi-Fi Direct 的网卡和驱动。实机测试覆盖 Windows 10、Windows 11、澎湃 OS 3 和澎湃 OS 4。暂无 Linux 版。
+
+<a id="pc-to-phone"></a>
+## 电脑发手机
+
+0.2.6 恢复了可选的小米文件服务。接收可以直接用。从电脑发送前，将同一套 **小米电脑管家 5.8.1.130 x64** 的 `MiDropTransfer.dll`、`LIBEAY32.dll`、`ssleay32.dll` 放到 `Lindrop.exe` 旁边的 `XiaomiRuntime` 文件夹。三个文件由用户从官方安装包或自己的同版本安装取得。
+
+1. 下载小米电脑管家 5.8.1.130、提取脚本和 7-Zip x64。[小米官方下载](https://cdn.cnbj1.fds.api.mi-img.com/ota-packages/TS4L_XiaomiPCManager_feature_p52_5.8.1.130_b5a04836.exe) · [提取脚本](https://github.com/majian01/Lindrop/releases/download/v0.2.6-preview/Extract-XiaomiRuntime.ps1) · [7-Zip](https://www.7-zip.org/)
+2. 在下载目录打开 PowerShell，运行下面的命令。将 `-OutputDirectory` 改成自己的目录。便携版的目标是解压目录下的 `app\XiaomiRuntime`。脚本只解包并校验三个 DLL，无需运行小米安装器。
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Extract-XiaomiRuntime.ps1 `
+  -InstallerPath .\TS4L_XiaomiPCManager_feature_p52_5.8.1.130_b5a04836.exe `
+  -OutputDirectory 'D:\Programs\Lindrop\XiaomiRuntime'
+```
+
+3. 打开邻渡，选文件和手机，在手机上接受。若提示缺少 C++ 运行库，请安装微软 Visual C++ x64 运行库。[微软官方下载](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist)
 
 ## English
 
@@ -22,9 +36,9 @@ Lindrop is an unofficial Xiaomi Share companion for Windows. Pick a file on your
 
 [Download for Windows](https://github.com/majian01/Lindrop/releases). Run the setup EXE, or extract the portable ZIP and open `app\Lindrop.exe`. The runtimes are included. You can change the download folder in Settings and open received files from History. Quit Lindrop from the tray before updating. Uninstalling keeps your received files.
 
-Double-click `Install-Lindrop-Online.cmd` to download and verify the 0.2.5 Preview installer and open Setup. Run it with `--verify-only` to check the download without installing. [Download the script](https://github.com/majian01/Lindrop/releases/download/v0.2.5-preview/Install-Lindrop-Online.cmd)
+Double-click `Install-Lindrop-Online.cmd` to download and verify the 0.2.6 Preview installer and open Setup. Run it with `--verify-only` to check the download without installing. [Download the script](https://github.com/majian01/Lindrop/releases/download/v0.2.6-preview/Install-Lindrop-Online.cmd)
 
-**Phone-to-PC receiving works without extra setup.** Sending from Lindrop to native Xiaomi Share requires Xiaomi-authorized credentials. We have not found a public application process for third-party Windows apps. To send from a PC, use Xiaomi PC Manager on supported Xiaomi laptops or the official Xiaomi Interconnectivity app on other compatible PCs on the same local network as the phone. [Xiaomi Share](https://hyperos.mi.com/continuity/abilities/ab0001) · [Xiaomi Windows Interconnectivity](https://os.mi.com/continuity/abilities/ab0019)
+**Phone-to-PC receiving works without extra setup.** For PC-to-phone sending, extract the three matching DLLs from Xiaomi PC Manager 5.8.1.130 x64 and place them in `XiaomiRuntime` alongside `Lindrop.exe`. Set `-OutputDirectory` to that folder in the command above. The extractor uses 7-Zip and verifies all three files. Install the Microsoft Visual C++ x64 Redistributable if Windows needs it. [Downloads and command](#pc-to-phone)
 
 Requires Windows 10 21H2 or later, including Windows 11 (x64), Bluetooth LE, and Wi-Fi Direct. Hardware testing has covered Windows 10, Windows 11, Xiaomi HyperOS 3, and Xiaomi HyperOS 4. Linux is not supported.
 
